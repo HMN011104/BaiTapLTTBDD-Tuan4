@@ -1,15 +1,27 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/task_model.dart';
+import 'dart:io';
+import 'dart:developer';
+import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ApiService {
   static const String baseUrl = 'https://amock.io/api/researchUTH/tasks';
 
+  static Future<void> logToFile(String message) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/app_log.txt');
+    await file.writeAsString('$message\n', mode: FileMode.append);
+  }
+
   static Future<List<Task>> fetchTasks() async {
-    print('Fetching tasks from $baseUrl...');
     final response = await http.get(Uri.parse(baseUrl));
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    final logMessage =
+        'Fetching Tasks: Status: ${response.statusCode}, Body: ${response.body}';
+    await logToFile(logMessage);
+    log(logMessage);
+
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
       if (json['isSuccess'] == true) {
@@ -24,31 +36,22 @@ class ApiService {
   }
 
   static Future<Task> fetchTaskDetail(int taskId) async {
-  final url = '$baseUrl/$taskId';
-  print('Fetching URL: $url');
+    final url = '$baseUrl/$taskId';
+    final response = await http.get(Uri.parse(url));
+    final logMessage =
+        'Fetching Task $taskId: URL: $url, Status: ${response.statusCode}, Body: ${response.body}';
+    await logToFile(logMessage);
+    log(logMessage);
 
-  final response = await http.get(
-    Uri.parse(url),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  );
-
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> json = jsonDecode(response.body);
-    if (json['isSuccess'] == true) {
-      return Task.fromJson(json['data']);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> json = jsonDecode(response.body);
+      if (json['isSuccess'] == true) {
+        return Task.fromJson(json['data']);
+      } else {
+        throw Exception('API Error: ${json['message']}');
+      }
     } else {
-      throw Exception('API Error: ${json['message']}');
+      throw Exception('Failed to load task details. Status code: ${response.statusCode}');
     }
-  } else if (response.statusCode == 404) {
-    throw Exception('Task with ID $taskId not found (404).');
-  } else {
-    throw Exception('Failed to load task details. Status code: ${response.statusCode}');
   }
-}
 }
