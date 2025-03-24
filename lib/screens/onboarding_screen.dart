@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:your_app/screens/task_list_screen.dart'; // Import TaskListScreen
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({Key? key}) : super(key: key);
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
@@ -12,17 +15,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       "image": "assets/intro1.png",
       "title": "Easy Time Management",
-      "description": "With management based on priority and daily tasks, it will give you convenience in managing and determining the tasks that must be done first"
+      "description": "Manage daily tasks efficiently with prioritization."
     },
     {
       "image": "assets/intro2.png",
       "title": "Increase Work Effectiveness",
-      "description": "Time management and the determination of more important tasks will give your job statistics better and always improve"
+      "description": "Improve job statistics by managing tasks smartly."
     },
     {
       "image": "assets/intro3.png",
       "title": "Reminder Notification",
-      "description": "The advantage of this application is that it also provides reminders for you so you don't forget to keep doing your assignments well and according to the time you have set"
+      "description": "Never forget your tasks with automatic reminders."
     },
   ];
 
@@ -32,22 +35,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         currentIndex++;
       });
     } else {
-
-      Navigator.of(context).pushReplacementNamed('/tasks');
-    }
-  }
-
-  void previousScreen() {
-    if (currentIndex > 0) {
-      setState(() {
-        currentIndex--;
-      });
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => TaskListScreen()),
+      );
     }
   }
 
   void skipScreen() {
-
-    Navigator.of(context).pushReplacementNamed('/tasks');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => TaskListScreen()),
+    );
   }
 
   @override
@@ -60,20 +57,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             alignment: Alignment.topRight,
             child: TextButton(
               onPressed: skipScreen,
-              child: Text(
-                "Skip",
-                style: TextStyle(fontSize: 16, color: Colors.blue),
-              ),
+              child: Text("Skip", style: TextStyle(fontSize: 16, color: Colors.blue)),
             ),
           ),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  onboardingData[currentIndex]["image"]!,
-                  height: 250, 
-                ),
+                Image.asset(onboardingData[currentIndex]["image"]!),
                 SizedBox(height: 20),
                 Text(
                   onboardingData[currentIndex]["title"]!,
@@ -94,19 +85,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: currentIndex > 0 ? Colors.blue : Colors.grey,
-                ),
-                onPressed: currentIndex > 0 ? previousScreen : null,
+                icon: Icon(Icons.arrow_back, color: currentIndex > 0 ? Colors.blue : Colors.grey),
+                onPressed: currentIndex > 0 ? () => setState(() => currentIndex--) : null,
               ),
               ElevatedButton(
                 onPressed: nextScreen,
-                child: Text(
-                  currentIndex == onboardingData.length - 1
-                      ? "Get Started"
-                      : "Next",
-                ),
+                child: Text(currentIndex == onboardingData.length - 1 ? "Get Started" : "Next"),
               ),
             ],
           ),
