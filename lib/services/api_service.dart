@@ -6,7 +6,10 @@ class ApiService {
   static const String baseUrl = 'https://amock.io/api/researchUTH/tasks';
 
   static Future<List<Task>> fetchTasks() async {
+    print('Fetching tasks from $baseUrl...');
     final response = await http.get(Uri.parse(baseUrl));
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
       if (json['isSuccess'] == true) {
@@ -21,7 +24,10 @@ class ApiService {
   }
 
   static Future<Task> fetchTaskDetail(int taskId) async {
+    print('Fetching task detail for ID $taskId...');
     final response = await http.get(Uri.parse('$baseUrl/$taskId'));
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
       if (json['isSuccess'] == true) {
@@ -29,6 +35,8 @@ class ApiService {
       } else {
         throw Exception('API Error: ${json['message']}');
       }
+    } else if (response.statusCode == 404) {
+      throw Exception('Task with ID $taskId not found (404).');
     } else {
       throw Exception('Failed to load task details. Status code: ${response.statusCode}');
     }
