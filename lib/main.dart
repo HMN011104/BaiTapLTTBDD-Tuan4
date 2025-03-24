@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
       title: 'Task Manager App',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const SplashScreen(),
-      },
     );
   }
 }
