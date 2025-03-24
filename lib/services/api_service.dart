@@ -20,7 +20,7 @@ class ApiService {
     }
   }
 
-  static Future<Task> fetchTaskDetail(int taskId) async {
+  static Future<Task> fetchTaskDetail(int id) async {
     final response = await http.get(Uri.parse('$baseUrl/$taskId'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);
