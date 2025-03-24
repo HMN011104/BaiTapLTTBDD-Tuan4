@@ -16,7 +16,9 @@ class TaskDetailScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Failed to load details:${snapshot.error}'));
+            return Center(
+               child: Text('Failed to load details: ${snapshot.error}'),
+            );
           } else if (snapshot.hasData) {
             final task = snapshot.data!;
             return Padding(
