@@ -36,7 +36,7 @@ class TaskListScreen extends StatelessWidget {
                   },
                 );
               },
-            )
+            );
           }
         },
       ),
