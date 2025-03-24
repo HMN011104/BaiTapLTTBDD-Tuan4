@@ -1,42 +1,117 @@
 import 'package:flutter/material.dart';
-import 'task_list_screen.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+class OnboardingScreen extends StatefulWidget {
+  @override
+  _OnboardingScreenState createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  int currentIndex = 0;
+
+  final List<Map<String, String>> onboardingData = [
+    {
+      "image": "assets/intro1.png",
+      "title": "Easy Time Management",
+      "description": "With management based on priority and daily tasks, it will give you convenience in managing and determining the tasks that must be done first"
+    },
+    {
+      "image": "assets/intro2.png",
+      "title": "Increase Work Effectiveness",
+      "description": "Time management and the determination of more important tasks will give your job statistics better and always improve"
+    },
+    {
+      "image": "assets/intro3.png",
+      "title": "Reminder Notification",
+      "description": "The advantage of this application is that it also provides reminders for you so you don't forget to keep doing your assignments well and according to the time you have set"
+    },
+  ];
+
+  void nextScreen() {
+    if (currentIndex < onboardingData.length - 1) {
+      setState(() {
+        currentIndex++;
+      });
+    } else {
+
+      Navigator.of(context).pushReplacementNamed('/tasks');
+    }
+  }
+
+  void previousScreen() {
+    if (currentIndex > 0) {
+      setState(() {
+        currentIndex--;
+      });
+    }
+  }
+
+  void skipScreen() {
+
+    Navigator.of(context).pushReplacementNamed('/tasks');
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> introData = [
-      {'image': 'assets/intro1.png', 'text': 'Welcome to Task Manager'},
-      {'image': 'assets/intro2.png', 'text': 'Track your tasks easily'},
-      {'image': 'assets/intro3.png', 'text': 'Get things done faster'},
-    ];
-
     return Scaffold(
-      body: PageView.builder(
-        itemCount: introData.length,
-        itemBuilder: (context, index) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: skipScreen,
+              child: Text(
+                "Skip",
+                style: TextStyle(fontSize: 16, color: Colors.blue),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  onboardingData[currentIndex]["image"]!,
+                  height: 250, 
+                ),
+                SizedBox(height: 20),
+                Text(
+                  onboardingData[currentIndex]["title"]!,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    onboardingData[currentIndex]["description"]!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image.asset(introData[index]['image']!, height: 300),
-              const SizedBox(height: 20),
-              Text(introData[index]['text']!, style: const TextStyle(fontSize: 18)),
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: currentIndex > 0 ? Colors.blue : Colors.grey,
+                ),
+                onPressed: currentIndex > 0 ? previousScreen : null,
+              ),
+              ElevatedButton(
+                onPressed: nextScreen,
+                child: Text(
+                  currentIndex == onboardingData.length - 1
+                      ? "Get Started"
+                      : "Next",
+                ),
+              ),
             ],
-          );
-        },
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const TaskListScreen()),
-            );
-          },
-          child: const Text('Get Started'),
-        ),
+          ),
+          SizedBox(height: 20),
+        ],
       ),
     );
   }
