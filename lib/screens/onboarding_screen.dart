@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:your_app/screens/task_list_screen.dart'; // Import TaskListScreen
+import 'task_list_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -15,17 +15,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       "image": "assets/intro1.png",
       "title": "Easy Time Management",
-      "description": "Manage daily tasks efficiently with prioritization."
+      "description": "With management based on priority and dolly tasks, it will give you convenience in managing and determining the tasks that must be done first."
     },
     {
       "image": "assets/intro2.png",
-      "title": "Increase Work Effectiveness",
-      "description": "Improve job statistics by managing tasks smartly."
+      "title": "Increase Work Effectiveness.",
+      "description": "Time management and the determination of more important tasks will give your job statistics better and always improve."
     },
     {
       "image": "assets/intro3.png",
       "title": "Reminder Notification",
-      "description": "Never forget your tasks with automatic reminders."
+      "description": "The advantage of this application is that it also provides reminders for you so you don't forget to keep doing your assignments well and according to the time you have set."
     },
   ];
 
