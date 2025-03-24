@@ -22,25 +22,25 @@ class TaskListScreen extends StatelessWidget {
             final tasks = snapshot.data!;
             return ListView.builder(
               itemCount: tasks.length,
-              itemBuilder: (context, index) {
-                final task = tasks[index];
-                return TaskListItem(
-                  title: Text(task.title),
-                  subtitle: Text(task.description),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TaskDetailScreen(taskId: task.id),
-                      ),
-                    );
+  	          itemBuilder: (context, index) {
+    	           final task = tasks[index];
+   		           return TaskListItem(
+      		          task: task,
+      	            onTap: () {
+        	             Navigator.push(
+            	            context,
+          	              MaterialPageRoute(
+            	              builder: (context) => TaskDetailScreen(taskId: task.id),
+          	              ),
+                     );
                   },
                 );
               },
-            );
+            )
           }
         },
       ),
     );
   }
 }
+
